@@ -5,21 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Filmokrad</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <header class="header">
-      <nav class="header__nav">
-        <ul class="header__list">
-          <li class="header__item">
-            <a href="#" class="header__link">Home</a>
-          </li>
-          <li class="header__item">
-            <a href="#" class="header__link">Library</a>
-          </li>
-        </ul>
-      </nav>
-      <input type="text" />
+    <header>
+      <div class="header-container">
+        <div class="header">
+          <div class="header__wrapper">
+            <a href="" class="header__logo">
+              <h1 class="header__title">Filmoteka</h1>
+            </a>
+            <nav class="header__nav">
+              <ul class="header__list">
+                <li class="header__item">
+                  <a href="#" class="header__link active">Home</a>
+                </li>
+                <li class="header__item">
+                  <a href="#" class="header__link">Library</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <input class="header__input" id="js-input" type="text" />
+        </div>
+      </div>
     </header>
+
+    <section class="gallery">
+      <div class="container">
+        <div id="js-gallery" class="gallery-wrapper"></div>
+      </div>
+    </section>
   </body>
 </html>
