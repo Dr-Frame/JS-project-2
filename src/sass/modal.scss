@@ -1,0 +1,173 @@
+h2,
+h3 {
+  margin: 0;
+}
+p {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.modal {
+  display: flex;
+  padding: 30px 50px 30px 40px;
+}
+
+.modal__description {
+  max-width: 396px;
+}
+
+.modal__img {
+  margin-right: 30px;
+}
+
+.modal__title {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 35px;
+
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.modal__ratings {
+  display: flex;
+  margin-top: 20px;
+  flex-direction: column;
+}
+
+.modal__descr-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.modal__criteria {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #8c8c8c;
+}
+
+.modal__descr-wrapper > h3 {
+  font-family: Roboto;
+
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #000000;
+}
+
+.modal__descr-wrapper .orange {
+  width: 36px;
+  height: 16px;
+  border-radius: 5px;
+  background: #ff6b01;
+  text-align: center;
+  color: white;
+}
+
+.modal__descr-wrapper .grey {
+  width: 36px;
+  height: 16px;
+  border-radius: 5px;
+  background: #f7f7f7;
+  text-align: center;
+}
+
+.modal__criteria.a {
+  margin-right: 91px;
+}
+.modal__criteria.b {
+  margin-right: 97px;
+}
+.modal__criteria.c {
+  margin-right: 83px;
+}
+.modal__criteria.d {
+  margin-right: 120px;
+}
+
+.modal__genre-list {
+  display: flex;
+}
+
+.modal__genre-list li {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #000000;
+}
+
+.modal__descr-title {
+  margin-top: 20px;
+  font-family: Roboto;
+
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+
+  text-transform: uppercase;
+
+  color: #000000;
+}
+
+.modal__descr-information {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 20px;
+
+  color: #000000;
+}
+
+.modal__buttons {
+  margin-top: 20px;
+}
+.modal__btn {
+  width: 136px;
+  height: 44px;
+  border-radius: 5px;
+
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.modal__btn.watched {
+  background: #ff6b01;
+  border: none;
+  color: #ffffff;
+  opacity: 0.9;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.modal__btn.queue {
+  border: 1px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 700;
+
+  &:hover {
+    background: #f7f7f7;
+  }
+}

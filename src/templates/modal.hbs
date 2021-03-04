@@ -1,0 +1,37 @@
+<img src="{{poster_path}}" alt="" class="modal__img" width="396" height="478" />
+<div class="modal__description">
+  <h2 class="modal__title">{{original_title}}</h2>
+  <div class="modal__ratings">
+    <div class="modal__descr-wrapper">
+      <p class="modal__criteria a">Vote/Votes</p>
+      <h3 class="orange">{{vote_average}}</h3>&nbsp/
+      <h3 class="grey">&nbsp{{vote_count}}</h3>
+    </div>
+    <div class="modal__descr-wrapper">
+      <p class="modal__criteria b">Popularity</p>
+      <h3>{{popularity}}</h3>
+    </div>
+    <div class="modal__descr-wrapper">
+      <p class="modal__criteria c">Original Title</p>
+      <h3>{{original_title}}</h3>
+    </div>
+    <div class="modal__descr-wrapper">
+      <p class="modal__criteria d">Genre</p>
+
+      <ul class="modal__genre-list">
+        {{#each genre_ids}}
+        <li>{{this}}&nbsp</li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="modal__descr-title">about</h3>
+  <p class="modal__descr-information">{{overview}}</p>
+  <div class="modal__buttons">
+    <button id="js-watched" class="modal__btn  watched">
+      add to watched
+    </button>
+    <button id="js-queue" class="modal__btn queue">add to queue</button>
+  </div>
+</div>

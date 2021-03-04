@@ -12,20 +12,28 @@ export default {
     const url = `${this.searchUrl}${this.apiKey}&language=en-US&query=${this.searchQuerry}&page=${this.page}`;
 
     return fetch(url)
-      .then(res => res.json())
-      .then(({ results }) => {
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error(res.status);
+      })
+      .then(data => {
         this.page += 1;
-        return results;
+        return data;
       })
       .catch(error => console.log(error));
   },
 
   fetchPopularMovieGallery() {
-    const url = `${this.trendingUrl}${this.apiKey}`;
+    const url = `${this.trendingUrl}${this.apiKey}&page=${this.page}`;
 
     return fetch(url)
       .then(res => res.json())
-      .then(({ results }) => results)
+      .then(data => {
+        this.page += 1;
+        return data;
+      })
       .catch(error => console.log(error));
   },
 

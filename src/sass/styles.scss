@@ -1,3 +1,4 @@
+@import './modal.scss';
 html {
   box-sizing: border-box;
 }
@@ -99,6 +100,22 @@ a {
   margin: 0;
 }
 
+.gallery__failure {
+  display: block;
+  margin: 0 auto;
+
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 26px;
+  text-align: center;
+
+  color: #000;
+}
+
+.gallery__failure > span {
+  color: #ff6b08;
+}
+
 .header-container {
   width: 1024px;
   margin: 0 auto;
@@ -157,7 +174,8 @@ a {
 }
 
 .header__input {
-  display: block;
+  position: relative;
+  display: flex;
   width: 336px;
   margin: 0 auto;
   background-color: transparent;
@@ -169,4 +187,18 @@ a {
   font-size: 14px;
   line-height: 16px;
   color: #ffffff;
+
+  /* &:after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-image: url('../images/img/search.svg');
+  } */
+}
+
+.header__input_search > use {
+  width: 12px;
+  height: 12px;
 }

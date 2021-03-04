@@ -2,6 +2,7 @@ import './sass/styles.scss';
 const _ = require('lodash');
 import apiFetch from './js/apiService.js';
 import popularFilmsGalerryTpl from './templates/filmgallery.hbs';
+import modalTpl from './templates/modal.hbs';
 
 let genreDB = [
   { id: 28, name: 'Action' },
@@ -27,22 +28,44 @@ let genreDB = [
 
 const inputRef = document.querySelector('#js-input');
 const galleryRef = document.querySelector('#js-gallery');
+const modalRef = document.querySelector('.modal');
 
-//inputRef.addEventListener('input', _.debounce(handleSearchQuery, 700));
+inputRef.addEventListener('input', _.debounce(handleSearchQuery, 700));
 
 startPopularFilms();
 
-// ============= фнкции отвечает за стартовую загрузку популярных фильмов
+// ============= фнкции отвечает за стартовую загрузку популярных фильмов =============================
+
+// берут значение после фетча
+let currentPage = 1;
+let totalPages;
+let totalResults;
 
 function startPopularFilms() {
-  apiFetch.fetchPopularMovieGallery().then(data => {
-    handlePopularFilmMarkup(genreTransform(data, genreDB));
-  });
+  apiFetch
+    .fetchPopularMovieGallery()
+    .then(data => {
+      currentPage = data.page;
+      totalPages = data.total_pages;
+      totalResults = data.total_results;
+      return data;
+    })
+    .then(({ results }) => {
+      handlePopularFilmMarkup(genreTransform(results, genreDB));
+    });
 }
 
 // меняет числа жанров на название и дату релиза
 function genreTransform(moviesDB, genreDB) {
   const transferedGenreArr = moviesDB.map(film => {
+    //ставим заглушку если нету фото
+    if (film.poster_path === null) {
+      film.poster_path = 'https://i.ibb.co/hWJT4yj/noImage.jpg';
+    } else {
+      const newPosterPath = `https://image.tmdb.org/t/p/w500/${film.poster_path}`;
+      film.poster_path = newPosterPath;
+    }
+
     //изменяем дату
     const newDate = film.release_date.slice(0, 4);
 
@@ -71,14 +94,94 @@ function handlePopularFilmMarkup(popularFilms) {
     genreDB = genres;
   });
 } */
-// =========================================================================
+// =================================================================================================
 
 //функции отвечающие за отрисовку запроса
-/* function handleSearchQuery(event) {
+function handleSearchQuery(event) {
+  apiFetch.searchQuerry = '';
   apiFetch.searchQuerry = event.target.value;
   if (event.target.value) {
-    apiFetch.fetchSearchRequestGallery().then(data => console.log(data));
+    galleryRef.innerHTML = '';
+    apiFetch
+      .fetchSearchRequestGallery()
+      .then(data => {
+        currentPage = data.page;
+        totalPages = data.total_pages;
+        totalResults = data.total_results;
+        return data;
+      })
+      .then(({ results }) => {
+        console.log(results);
+        if (results.length === 0) {
+          failureMarkup(galleryRef);
+        } else {
+          handlePopularFilmMarkup(genreTransform(results, genreDB));
+        }
+      })
+      .catch(error => console.log(error));
   } else {
     return;
   }
-} */
+  inputRef.value = '';
+  console.log(apiFetch.searchQuerry);
+}
+
+// рисует разметку когда нету результатов запроса
+function failureMarkup(placeToInsert) {
+  const failureMarkup =
+    '<p class="gallery__failure">Unfortunately, no matches found. <span>Try again!</span></p>';
+  placeToInsert.insertAdjacentHTML('afterbegin', failureMarkup);
+}
+
+/* $('#pagination-container').pagination({
+    dataSource: [1, 2, 3, 4, 5, 6, 7, ... , 195],
+    callback: function(data, pagination) {
+        // template method of yourself
+        var html = template(data);
+        $('#data-container').html(html);
+    }
+})
+ */
+
+let testObject = {
+  adult: false,
+  backdrop_path: '/69rb6VKOEqpuJ88MkKXLaSd71Va.jpg',
+  genre_ids: [99, 28, 12],
+  id: 299969,
+  original_language: 'en',
+  original_title: 'Marvel: 75 Years, From Pulp to Pop!',
+  overview:
+    "In celebration of the publisher's 75th anniversary, the hour-long special will take a detailed look at the company's journey from fledgling comics publisher to multi-media juggernaut. Hosted by Emily VanCamp (S.H.I.E.L.D. Agent Sharon Carter), the documentary-style feature will include interviews with comic book icons, pop culture authorities, and Hollywood stars.  The special also promises an extraordinary peek into Marvel's future! Might Marvel release the first official footage from next year's Avengers: Age of Ultron or Ant-Man? If they do, you'll know about it here.",
+  popularity: 9.273,
+  poster_path:
+    'https://image.tmdb.org/t/p/w500//qNC8co8LuGBv22Fu9SC71ppAwoA.jpg',
+  release_date: '2014-11-04',
+  title: 'Marvel: 75 Years, From Pulp to Pop!',
+  video: false,
+  vote_average: 6.9,
+  vote_count: 48,
+};
+
+//вызов рендеринга модалки
+handleModalMarkup(modalGenreEditor(testObject, genreDB));
+
+//изменяет жанр при рендере модалки
+function modalGenreEditor(movie, genreDB) {
+  //изменяем жанр
+  let genreArr = [];
+  movie.genre_ids.forEach(genreId => {
+    for (const genre of genreDB) {
+      if (genre.id === genreId) {
+        genreArr.push(genre.name);
+      }
+    }
+  });
+  movie.genre_ids = [...genreArr];
+  return movie;
+}
+
+//рендерит разметку модального окна
+function handleModalMarkup(currentMovie) {
+  const modalMarkup = modalTpl(currentMovie);
+  modalRef.insertAdjacentHTML('afterbegin', modalMarkup);
+}

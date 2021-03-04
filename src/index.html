@@ -32,7 +32,17 @@
             </nav>
           </div>
 
-          <input class="header__input" id="js-input" type="text" />
+          <div class="header__input-wrapper">
+            <input
+              class="header__input"
+              id="js-input"
+              placeholder="Search film"
+              type="text"
+            />
+            <svg class="header__input_search" width="25" height="25">
+              <use href="./images/img/search.svg"></use>
+            </svg>
+          </div>
         </div>
       </div>
     </header>
@@ -42,5 +52,11 @@
         <div id="js-gallery" class="gallery-wrapper"></div>
       </div>
     </section>
+
+    <div class="backdrop is-hidden" data-modal>
+      <div class="container">
+        <div class="modal"></div>
+      </div>
+    </div>
   </body>
 </html>
