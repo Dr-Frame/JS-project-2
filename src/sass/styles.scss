@@ -52,10 +52,13 @@ a {
     margin-bottom: 0;
   }
 }
-
-.gallery__link {
-  width: 274px;
+.gallery__item_img {
+  cursor: pointer;
 }
+
+/* .gallery__link {
+  width: 274px;
+} */
 
 .gallery__item_title {
   margin: 0;

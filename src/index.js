@@ -26,9 +26,15 @@ let genreDB = [
   { id: 37, name: 'Western' },
 ];
 
+//заходит сюда отрендеренный масив
+let moviesArr;
+//заходит обьект для рендера модалки
+let currentFilmObj = {};
+
 const inputRef = document.querySelector('#js-input');
 const galleryRef = document.querySelector('#js-gallery');
 const modalRef = document.querySelector('.modal');
+const backdropRef = document.querySelector('#js-backdrop');
 
 inputRef.addEventListener('input', _.debounce(handleSearchQuery, 700));
 
@@ -80,9 +86,11 @@ function genreTransform(moviesDB, genreDB) {
     });
     return { ...film, genre_ids: genreArr, release_date: newDate };
   });
+  moviesArr = transferedGenreArr;
   return transferedGenreArr;
 }
 
+//ставит разметку популярных фильмов
 function handlePopularFilmMarkup(popularFilms) {
   const popularMarkup = popularFilmsGalerryTpl(popularFilms);
   galleryRef.insertAdjacentHTML('beforeend', popularMarkup);
@@ -162,8 +170,25 @@ let testObject = {
   vote_count: 48,
 };
 
-//вызов рендеринга модалки
-handleModalMarkup(modalGenreEditor(testObject, genreDB));
+galleryRef.addEventListener('click', modalMatchesFounder);
+
+function modalMatchesFounder(event) {
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  //вызов рендеринга модалки
+  const toMatch = event.target.dataset.compare;
+
+  moviesArr.forEach(item => {
+    if (item.poster_path === toMatch) {
+      currentFilmObj = { ...item };
+    } else {
+      return;
+    }
+  });
+  handleModalMarkup(modalGenreEditor(currentFilmObj, genreDB));
+  backdropRef.classList.remove('is-hidden');
+}
 
 //изменяет жанр при рендере модалки
 function modalGenreEditor(movie, genreDB) {
