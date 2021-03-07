@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Filmoteka</title>
+</head>
+
+<body>
+  <header>
+
+    <div class="container--header container">
+      <div class="nav">
+
+        <a href="./index.html" class="nav__logo-link">
+          <svg class="nav__logo-icon" width="24" height="24">
+            <use href="./images/symbol-defs.svg#icon-logo"></use>
+          </svg>
+          <h1 class="nav__logo-tittle">Filmoteka</h1>
+        </a>
+
+        <nav class="nav__site">
+          <ul class="nav__site-list list">
+            <li class="nav__site-item"><a href="./index.html" class="nav__site-link">home</a></li>
+            <li class="nav__site-item"><a href="./library-page.html" class="nav__site-link nav__site-link--current">my library</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+      <div class="search-form-wrap">
+        <input type="text" class="search-form" placeholder="Поиск Фильмов">
+        <button class="search-form__btn" type="button">
+          <svg class="search-form__icon" width="12" height="12">
+            <use href="./images/symbol-defs.svg#icon-search"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+</body>
+
+</html>

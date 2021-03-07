@@ -1,0 +1,39 @@
+.footer {
+  background-color: $footer-background-color;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media screen and (min-width: 320px) and (max-width: 1023px) {
+    width: auto;
+  }
+  &__text-section {
+    align-items: center;
+    display: block;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: $footer-text-color;
+  }
+  &__icon {
+    color: $orange-second-color;
+    font-size: 18px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  &__link {
+    list-style-type: none;
+    font-style: normal;
+    border-bottom: 1px solid rgba(84, 84, 84, 1);
+    margin-left: 5px;
+    text-decoration: none !important;
+    color: $footer-text-color !important;
+  }
+}
+.material-icons {
+  color: $orange-second-color;
+  vertical-align: middle;
+  align-items: center;
+  font-size: 18px;
+  margin-left: 10px;
+  margin-right: 10px;
+}

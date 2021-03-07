@@ -1,26 +1,19 @@
-<div id="data-container">
-  <ul class="gallery__list">
-    {{#each this}}
-    <li class="gallery__item">
-
-
-      <img class="gallery__item_img" src="{{poster_path}}" data-compare="{{poster_path}}" alt="" width="274"
-        height="398" />
-
-
-      <h2 class="gallery__item_title">{{original_title}}</h2>
-      <div class="gallery__item_description">
-        <ul class="gallery__genres_list">
-          {{#each genre_ids}}
-          <li class="gallery__genres_genre">{{this}}<span>,&nbsp</span></li>
-          {{/each}}
-        </ul>
-        <p>&nbsp| {{release_date}}</p>
-      </div>
-
-
-    </li>
-    {{/each}}
-  </ul>
-</div>
-<div id="pagination-container"></div>
+{{#each this}}
+<li class="poster">
+  <div class="poster__img-wrap">
+    <img src="{{poster_path}}" data-compare="{{poster_path}}" alt="movie-poster" class="poster__img">
+  </div>
+  <div class="poster__content-wrap">
+    <h3 class="poster__movie-name">{{original_title}}</h3>
+    <div class="poster__movie-info-wrap">
+      <ul class="poster__genre-list list">
+        {{#each genre_ids}}
+        <li class="poster__genre-item">
+          {{this}}<span>,&nbsp;</span></li>
+        {{/each}}
+        <p class="poster__genre-item">&nbsp| {{release_date}}</p>
+      </ul>
+    </div>
+  </div>
+</li>
+{{/each}}

@@ -1,9 +1,29 @@
 import './sass/styles.scss';
 const _ = require('lodash');
+import refs from './js/refs';
 import apiFetch from './js/apiService.js';
 import popularFilmsGalerryTpl from './templates/filmgallery.hbs';
 import modalTpl from './templates/modal.hbs';
+import './js/close-modal';
 
+//============== вставка Dr.Frame======================
+//=====================================================
+
+// мои ссылки для корректной работы впихнутого кода
+const inputRef = refs.inputRef;
+const galleryRef = refs.galleryRef;
+
+const backdropRef = document.querySelector('#js-backdrop');
+
+// берут значение после фетча
+const resultData = {
+  currentPage: 1,
+  totalPages: null,
+  totalResults: null,
+  error: false,
+};
+
+//массив жанров от АПИ
 let genreDB = [
   { id: 28, name: 'Action' },
   { id: 12, name: 'Adventure' },
@@ -31,37 +51,61 @@ let moviesArr;
 //заходит обьект для рендера модалки
 let currentFilmObj = {};
 
-const inputRef = document.querySelector('#js-input');
-const galleryRef = document.querySelector('#js-gallery');
-const modalRef = document.querySelector('.modal');
-const backdropRef = document.querySelector('#js-backdrop');
+console.log(refs.paginBtnsRef);
 
-inputRef.addEventListener('input', _.debounce(handleSearchQuery, 700));
+/* function paginationBtn() {
+  refs.paginBtnsRef;
+} */
+
+refs.paginBtnWrapper.addEventListener('click', event => {
+  if (event.target.nodeName === 'BUTTON') {
+    const pageToRender = event.target.textContent;
+    apiFetch.page = Number(pageToRender);
+    console.log(pageToRender);
+
+    if (apiFetch.searchQuerry) {
+      handleBtnClickSearchQuery();
+    } else {
+      galleryRef.innerHTML = '';
+      startPopularFilms();
+    }
+  }
+});
+
+// ============================== старт приложения ============================
 
 startPopularFilms();
+inputRef.addEventListener('input', _.debounce(handleSearchQuery, 1000));
 
-// ============= фнкции отвечает за стартовую загрузку популярных фильмов =============================
+refs.prevBtnRef.addEventListener('click', handleBtnPrevClick);
+refs.nextBtnRef.addEventListener('click', handleBtnNextClick);
 
-// берут значение после фетча
-let currentPage = 1;
-let totalPages;
-let totalResults;
+galleryRef.addEventListener('click', modalMatchesFounder);
+
+// ============= функции отвечает за стартовую загрузку популярных фильмов =============================
+
+function dishargeCurPage() {
+  apiFetch.resetPage();
+}
 
 function startPopularFilms() {
+  resultData.error = false;
+  refs.galleryRef.classList.remove('movie__list--error');
   apiFetch
     .fetchPopularMovieGallery()
     .then(data => {
-      currentPage = data.page;
-      totalPages = data.total_pages;
-      totalResults = data.total_results;
+      resultData.currentPage = data.page;
+      resultData.totalPages = data.total_pages;
+      resultData.totalResults = data.total_results;
       return data;
     })
     .then(({ results }) => {
+      console.log(apiFetch.page);
       handlePopularFilmMarkup(genreTransform(results, genreDB));
     });
 }
 
-// меняет числа жанров на название и дату релиза
+//================================== меняет числа жанров на название и дату релиза
 function genreTransform(moviesDB, genreDB) {
   const transferedGenreArr = moviesDB.map(film => {
     //ставим заглушку если нету фото
@@ -87,41 +131,78 @@ function genreTransform(moviesDB, genreDB) {
     return { ...film, genre_ids: genreArr, release_date: newDate };
   });
   moviesArr = transferedGenreArr;
+  console.log(moviesArr);
   return transferedGenreArr;
 }
 
-//ставит разметку популярных фильмов
+//=================================ставит разметку популярных фильмов
 function handlePopularFilmMarkup(popularFilms) {
   const popularMarkup = popularFilmsGalerryTpl(popularFilms);
   galleryRef.insertAdjacentHTML('beforeend', popularMarkup);
 }
 
-// пока не нужно, база айди как масив обьектов константа
-/* function genreDBFetch() {
-  apiFetch.fetchGenresList().then(({ genres }) => {
-    genreDB = genres;
-  });
-} */
 // =================================================================================================
 
-//функции отвечающие за отрисовку запроса
+//==============================    функция стрелки НАЗАД
+function handleBtnPrevClick() {
+  if (apiFetch.page === 1 || resultData.error) {
+    return;
+  } else if (inputRef.value) {
+    galleryRef.innerHTML = '';
+    apiFetch.page -= 1;
+    handleBtnClickSearchQuery();
+    return;
+  } else {
+    galleryRef.innerHTML = '';
+    apiFetch.page -= 1;
+
+    console.log(apiFetch.page);
+    startPopularFilms();
+  }
+}
+
+//===============================   функция стрелки ВПЕРЕД
+function handleBtnNextClick() {
+  console.log(resultData.totalPages);
+  if (apiFetch.page === resultData.totalPages || resultData.error) {
+    return;
+  } else if (inputRef.value) {
+    galleryRef.innerHTML = '';
+    apiFetch.page += 1;
+    handleBtnClickSearchQuery();
+    return;
+  } else {
+    galleryRef.innerHTML = '';
+    apiFetch.page += 1;
+
+    console.log(apiFetch.page);
+    startPopularFilms();
+  }
+}
+
+//===============================функции отвечающие за отрисовку запроса
 function handleSearchQuery(event) {
+  dishargeCurPage();
+  resultData.error = false;
+  refs.galleryRef.classList.remove('movie__list--error');
+  //event.preventDefault();
   apiFetch.searchQuerry = '';
-  apiFetch.searchQuerry = event.target.value;
+  apiFetch.searchQuerry = inputRef.value;
+  console.log(apiFetch.page);
   if (event.target.value) {
     galleryRef.innerHTML = '';
     apiFetch
       .fetchSearchRequestGallery()
       .then(data => {
-        currentPage = data.page;
-        totalPages = data.total_pages;
-        totalResults = data.total_results;
+        console.log(data);
+        resultData.currentPage = data.page;
+        resultData.totalPages = data.total_pages;
+        resultData.totalResults = data.total_results;
         return data;
       })
       .then(({ results }) => {
-        console.log(results);
         if (results.length === 0) {
-          failureMarkup(galleryRef);
+          failureMarkup(refs.galleryRef);
         } else {
           handlePopularFilmMarkup(genreTransform(results, genreDB));
         }
@@ -130,47 +211,43 @@ function handleSearchQuery(event) {
   } else {
     return;
   }
-  inputRef.value = '';
-  console.log(apiFetch.searchQuerry);
+  //inputRef.value = '';
+}
+
+//функция рендера поискового запроса, при клике НА КНОПКУ
+function handleBtnClickSearchQuery() {
+  galleryRef.innerHTML = '';
+  apiFetch
+    .fetchSearchRequestGallery()
+    .then(data => {
+      resultData.currentPage = data.page;
+      resultData.totalPages = data.total_pages;
+      resultData.totalResults = data.total_results;
+      return data;
+    })
+    .then(({ results }) => {
+      if (results.length === 0) {
+        failureMarkup(refs.galleryRef);
+      } else {
+        handlePopularFilmMarkup(genreTransform(results, genreDB));
+      }
+    })
+    .catch(error => console.log(error));
 }
 
 // рисует разметку когда нету результатов запроса
 function failureMarkup(placeToInsert) {
-  const failureMarkup =
-    '<p class="gallery__failure">Unfortunately, no matches found. <span>Try again!</span></p>';
+  resultData.error = true;
+  refs.galleryRef.classList.add('movie__list--error');
+  const failureMarkup = `<div class="error">
+  <div class="error-img"><img src="https://i.ibb.co/4WvT00q/caterror.jpg" alt="" width="300"></div>
+
+  <p class="gallery__failure"> Unfortunately, no matches found. <span>Try again!</span> </p>
+</div>`;
   placeToInsert.insertAdjacentHTML('afterbegin', failureMarkup);
 }
 
-/* $('#pagination-container').pagination({
-    dataSource: [1, 2, 3, 4, 5, 6, 7, ... , 195],
-    callback: function(data, pagination) {
-        // template method of yourself
-        var html = template(data);
-        $('#data-container').html(html);
-    }
-})
- */
-
-let testObject = {
-  adult: false,
-  backdrop_path: '/69rb6VKOEqpuJ88MkKXLaSd71Va.jpg',
-  genre_ids: [99, 28, 12],
-  id: 299969,
-  original_language: 'en',
-  original_title: 'Marvel: 75 Years, From Pulp to Pop!',
-  overview:
-    "In celebration of the publisher's 75th anniversary, the hour-long special will take a detailed look at the company's journey from fledgling comics publisher to multi-media juggernaut. Hosted by Emily VanCamp (S.H.I.E.L.D. Agent Sharon Carter), the documentary-style feature will include interviews with comic book icons, pop culture authorities, and Hollywood stars.  The special also promises an extraordinary peek into Marvel's future! Might Marvel release the first official footage from next year's Avengers: Age of Ultron or Ant-Man? If they do, you'll know about it here.",
-  popularity: 9.273,
-  poster_path:
-    'https://image.tmdb.org/t/p/w500//qNC8co8LuGBv22Fu9SC71ppAwoA.jpg',
-  release_date: '2014-11-04',
-  title: 'Marvel: 75 Years, From Pulp to Pop!',
-  video: false,
-  vote_average: 6.9,
-  vote_count: 48,
-};
-
-galleryRef.addEventListener('click', modalMatchesFounder);
+// =================== модалка вывод фильма по клику =======================================
 
 function modalMatchesFounder(event) {
   if (event.target.nodeName !== 'IMG') {
@@ -201,12 +278,16 @@ function modalGenreEditor(movie, genreDB) {
       }
     }
   });
-  movie.genre_ids = [...genreArr];
+  movie.genre_ids = genreArr;
+  console.log(movie);
   return movie;
 }
 
 //рендерит разметку модального окна
 function handleModalMarkup(currentMovie) {
   const modalMarkup = modalTpl(currentMovie);
-  modalRef.insertAdjacentHTML('afterbegin', modalMarkup);
+  refs.modalBoxRef.insertAdjacentHTML('afterbegin', modalMarkup);
 }
+
+// ======================== конец кода  Dr.Frame  =============================================
+//==================================================================================

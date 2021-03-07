@@ -6,7 +6,7 @@ export default {
   apiKey: '3550330ecc32a34c7342dbd44dd96d6e',
   movieID: 0,
   searchQuerry: '',
-  page: 1,
+  page: 2,
 
   fetchSearchRequestGallery() {
     const url = `${this.searchUrl}${this.apiKey}&language=en-US&query=${this.searchQuerry}&page=${this.page}`;
@@ -19,7 +19,7 @@ export default {
         throw new Error(res.status);
       })
       .then(data => {
-        this.page += 1;
+        //this.page += 1;
         return data;
       })
       .catch(error => console.log(error));
@@ -31,7 +31,7 @@ export default {
     return fetch(url)
       .then(res => res.json())
       .then(data => {
-        this.page += 1;
+        //this.page += 1;
         return data;
       })
       .catch(error => console.log(error));

@@ -1,0 +1,102 @@
+body {
+  background-color: #FFFFFF;
+  color: $primary-text-color;
+
+  font-family: roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.33;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+
+  color: $primary-text-color;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  
+  border: none;
+  background-color: transparent;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+
+  @include for-size(mobile) {
+    width: 320px;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  @include for-size(tablet) {
+    width: 768px;
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+
+  @include for-size(desktop) {
+    width: 1024px;
+    padding-left: 71px;
+    padding-right: 71px;
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  background-color: transparent;
+
+  text-transform: uppercase;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}

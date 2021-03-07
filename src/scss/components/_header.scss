@@ -1,0 +1,67 @@
+.header {
+  position: relative;
+  display: block;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  padding-top: 46px;
+  padding-bottom: 118px;
+  margin-left: auto;
+  margin-right: auto;
+  @media screen and (min-width: 320px) and (max-width: 1023px) {
+    width: auto;
+  }
+  &__home {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
+      url(/images/header_home_mobile.jpg);
+    background-color: $black-color;
+  }
+  &__watched {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
+      url(/images/header_queue_watched_mobile.jpg);
+    background-color: $black-color;
+  }
+  @media screen and (min-width: 768px) {
+    &__home {
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.56),
+          rgba(0, 0, 0, 0.56)
+        ),
+        url(/images/header_home_tablet.jpg);
+      background-color: $black-color;
+    }
+
+    &__watched {
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.56),
+          rgba(0, 0, 0, 0.56)
+        ),
+        url(/images/header_queue_watched_tablet.jpg);
+      background-color: $black-color;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    &__home {
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.56),
+          rgba(0, 0, 0, 0.56)
+        ),
+        url(/images/header_home_desktop.jpg);
+      background-color: $black-color;
+    }
+
+    &__watched {
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.56),
+          rgba(0, 0, 0, 0.56)
+        ),
+        url(/images/header_queue_watched_desktop.jpg);
+      background-color: $black-color;
+    }
+  }
+}
+
+.is__hidden {
+  display: none;
+}

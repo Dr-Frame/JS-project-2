@@ -1,0 +1,69 @@
+.nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+
+  &__logo {
+    display: block;
+    align-items: center;
+    text-align: center;
+
+    margin-right: 29px;
+    font-weight: 500;
+    font-size: 30px;
+    color: $white-color;
+    text-decoration: none !important;
+  }
+  //   &__logo-icon {
+  //     width: 24px;
+  //     height: 24px;
+  //   }
+  &__logo-text {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    font-size: 1px;
+    margin: 0px;
+    @media screen and (min-width: 768px) {
+      & {
+        font-weight: 500;
+        font-size: 30px;
+        color: $white-color;
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+      }
+    }
+  }
+  &__btn-section {
+    display: flex;
+  }
+  &__btn {
+    position: relative;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: block;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.17;
+    color: $white-color;
+
+    &:not(:last-child) {
+      margin-right: 33px;
+    }
+  }
+}
+.current {
+  &::after {
+    position: absolute;
+    bottom: 15;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: $orange-color;
+  }
+}

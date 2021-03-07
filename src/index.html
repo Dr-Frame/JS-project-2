@@ -4,58 +4,102 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Filmokrad</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
+      rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <title>Filmoteka</title>
   </head>
 
   <body>
     <header>
-      <div class="header-container">
-        <div class="header">
-          <div class="header__wrapper">
-            <a href="" class="header__logo">
-              <h1 class="header__title">Filmoteka</h1>
-            </a>
-            <nav class="header__nav">
-              <ul class="header__list">
-                <li class="header__item">
-                  <a href="#" class="header__link active">Home</a>
-                </li>
-                <li class="header__item">
-                  <a href="#" class="header__link">Library</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-
-          <div class="header__input-wrapper">
-            <input
-              class="header__input"
-              id="js-input"
-              placeholder="Search film"
-              type="text"
-            />
-            <svg class="header__input_search" width="25" height="25">
-              <use href="./images/img/search.svg"></use>
+      <div class="container--header container">
+        <div class="nav">
+          <a href="./index.html" class="nav__logo-link">
+            <svg class="nav__logo-icon" width="24" height="24">
+              <use href="./images/symbol-defs.svg#icon-logo"></use>
             </svg>
-          </div>
+            <h1 class="nav__logo-tittle">Filmoteka</h1>
+          </a>
+
+          <nav class="nav__site">
+            <ul class="nav__site-list list">
+              <li class="nav__site-item">
+                <a
+                  href="./index.html"
+                  class="nav__site-link nav__site-link--current"
+                  >home</a
+                >
+              </li>
+              <li class="nav__site-item">
+                <a href="./library-page.html" class="nav__site-link"
+                  >my library</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="search-form-wrap">
+          <input type="text" class="search-form" placeholder="Поиск Фильмов" />
+          <button class="search-form__btn" type="button">
+            <svg class="search-form__icon" width="12" height="12">
+              <use href="./images/symbol-defs.svg#icon-search"></use>
+            </svg>
+          </button>
         </div>
       </div>
     </header>
 
-    <section class="gallery">
-      <div class="container">
-        <div id="js-gallery" class="gallery-wrapper"></div>
-      </div>
-    </section>
+    <main>
+      <section class="movie">
+        <div class="container js-container">
+          <h2 class="movie__tittle visually-hidden">List of movies</h2>
+          <ul class="movie__list list"></ul>
 
-    <div id="js-backdrop" class="backdrop is-hidden" data-modal>
-      <div class="container">
-        <div class="modal"></div>
+          <div class="pagination">
+            <button class="pagination__btn" id="js-prev-btn">
+              <svg class="pagination__btn-icon" width="15" height="15">
+                <use href="./images/symbol-defs.svg#icon-arrow-left"></use>
+              </svg>
+            </button>
+            <div class="pagination__page-numbers">
+              <button
+                class="pagination__page-btn pagination__page-btn--active"
+                data-index="1"
+              >
+                1
+              </button>
+              <button class="pagination__page-btn" data-index="2">2</button>
+              <button class="pagination__page-btn" data-index="3">3</button>
+              <button class="pagination__page-btn" data-index="4">4</button>
+              <button class="pagination__page-btn" data-index="5">5</button>
+            </div>
+            <button class="pagination__btn" id="js-next-btn">
+              <svg class="pagination__btn-icon" width="15" height="15">
+                <use href="./images/symbol-defs.svg#icon-arrow-right"></use>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="js-backdrop" class="backdrop is-hidden">
+      <div class="card">
+        <button class="card__btn-close" type="button">
+          <span class="material-icons card__icon-close"> clear </span>
+        </button>
+
+        <div class="card-box"></div>
       </div>
     </div>
   </body>
