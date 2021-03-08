@@ -3,6 +3,7 @@ const _ = require('lodash');
 import refs from './js/refs';
 import apiFetch from './js/apiService.js';
 import popularFilmsGalerryTpl from './templates/filmgallery.hbs';
+import libraryPage from './templates/library.hbs'
 import modalTpl from './templates/modal.hbs';
 import './js/close-modal';
 
@@ -53,10 +54,6 @@ let currentFilmObj = {};
 
 console.log(refs.paginBtnsRef);
 
-/* function paginationBtn() {
-  refs.paginBtnsRef;
-} */
-
 refs.paginBtnWrapper.addEventListener('click', event => {
   if (event.target.nodeName === 'BUTTON') {
     const pageToRender = event.target.textContent;
@@ -82,7 +79,25 @@ refs.nextBtnRef.addEventListener('click', handleBtnNextClick);
 
 galleryRef.addEventListener('click', modalMatchesFounder);
 
+refs.libraryLinkRef.addEventListener('click' ,libraryPageRender )
+
 // ============= функции отвечает за стартовую загрузку популярных фильмов =============================
+
+
+// функция отрисовки страницы библиотеки
+function libraryPageRender() {
+  refs.libraryInsertPlaceRef.innerHTML = ''
+  galleryRef.innerHTML=''
+  libraryPageMarkupInsert()
+}
+
+//======================    функция рендерит Библиотку страницу
+function libraryPageMarkupInsert() {
+  
+  const libraryMarkupTpl = libraryPage();
+  refs.libraryInsertPlaceRef.insertAdjacentHTML('afterbegin' , libraryMarkupTpl)
+
+}
 
 function dishargeCurPage() {
   apiFetch.resetPage();

@@ -1,106 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <title>Filmoteka</title>
-  </head>
 
-  <body>
-    <header>
-      <div class="container--header container">
-        <div class="nav">
-          <a href="./index.html" class="nav__logo-link">
-            <svg class="nav__logo-icon" width="24" height="24">
-              <use href="./images/symbol-defs.svg#icon-logo"></use>
-            </svg>
-            <h1 class="nav__logo-tittle">Filmoteka</h1>
-          </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Filmoteka</title>
+</head>
 
-          <nav class="nav__site">
-            <ul class="nav__site-list list">
-              <li class="nav__site-item">
-                <a
-                  href="./index.html"
-                  class="nav__site-link nav__site-link--current"
-                  >home</a
-                >
-              </li>
-              <li class="nav__site-item">
-                <a href="./library-page.html" class="nav__site-link"
-                  >my library</a
-                >
-              </li>
-            </ul>
-          </nav>
-        </div>
+<body>
+  <header class="my-library">
 
-        <div class="search-form-wrap">
-          <input type="text" class="search-form" placeholder="Поиск Фильмов" />
-          <button class="search-form__btn" type="button">
-            <svg class="search-form__icon" width="12" height="12">
-              <use href="./images/symbol-defs.svg#icon-search"></use>
-            </svg>
-          </button>
-        </div>
+    <div class="container--header container">
+      <div class="nav">
+
+        <a href="./index.html" class="nav__logo-link">
+          <svg class="nav__logo-icon" width="24" height="24">
+            <use href="./images/symbol-defs.svg#icon-logo"></use>
+          </svg>
+          <h1 class="nav__logo-tittle">Filmoteka</h1>
+        </a>
+
+        <nav class="nav__site">
+          <ul class="nav__site-list list">
+            <li class="nav__site-item"><a href="./index.html" class="nav__site-link nav__site-link--current">home</a>
+            </li>
+            <li class="nav__site-item"><a href="#" class="nav__site-link js-library">my library</a></li>
+          </ul>
+        </nav>
+
       </div>
-    </header>
 
-    <main>
-      <section class="movie">
-        <div class="container js-container">
-          <h2 class="movie__tittle visually-hidden">List of movies</h2>
-          <ul class="movie__list list"></ul>
-
-          <div class="pagination">
-            <button class="pagination__btn" id="js-prev-btn">
-              <svg class="pagination__btn-icon" width="15" height="15">
-                <use href="./images/symbol-defs.svg#icon-arrow-left"></use>
-              </svg>
-            </button>
-            <div class="pagination__page-numbers">
-              <button
-                class="pagination__page-btn pagination__page-btn--active"
-                data-index="1"
-              >
-                1
-              </button>
-              <button class="pagination__page-btn" data-index="2">2</button>
-              <button class="pagination__page-btn" data-index="3">3</button>
-              <button class="pagination__page-btn" data-index="4">4</button>
-              <button class="pagination__page-btn" data-index="5">5</button>
-            </div>
-            <button class="pagination__btn" id="js-next-btn">
-              <svg class="pagination__btn-icon" width="15" height="15">
-                <use href="./images/symbol-defs.svg#icon-arrow-right"></use>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <div id="js-backdrop" class="backdrop is-hidden">
-      <div class="card">
-        <button class="card__btn-close" type="button">
-          <span class="material-icons card__icon-close"> clear </span>
+      <div class="search-form-wrap">
+        <input type="text" class="search-form" placeholder="Поиск Фильмов">
+        <button class="search-form__btn" type="button">
+          <svg class="search-form__icon" width="12" height="12">
+            <use href="./images/symbol-defs.svg#icon-search"></use>
+          </svg>
         </button>
-
-        <div class="card-box"></div>
       </div>
     </div>
-  </body>
+  </header>
+
+
+  <main>
+    <section class="movie">
+      <div class="container js-container">
+        <h2 class="movie__tittle visually-hidden">List of movies</h2>
+        <ul class="movie__list list">
+         
+        </ul>
+
+        <div class="pagination">
+        <button class="pagination__btn" id="js-prev-btn">
+          <svg class="pagination__btn-icon" width="15" height="15">
+            <use href="./images/symbol-defs.svg#icon-arrow-left"></use>
+          </svg>
+        </button>
+        <div class="pagination__page-numbers">
+          <button class="pagination__page-btn pagination__page-btn--active">1</button>
+          <button class="pagination__page-btn">2</button>
+          <button class="pagination__page-btn">3</button>
+          <button class="pagination__page-btn">4</button>
+          <button class="pagination__page-btn">5</button>
+        </div>
+        <button class="pagination__btn" id="js-next-btn">
+          <svg class="pagination__btn-icon" width="15" height="15">
+            <use href="./images/symbol-defs.svg#icon-arrow-right"></use>
+          </svg>
+        </button>
+      </div>
+      </div>
+
+    
+
+    </section>
+
+
+  </main>
+
+  <footer>
+    <div class="container container--footer">
+      
+        <p class="right">
+          &copy 2020 | All Rights Reserved | 
+        </p>
+        <p class="development">
+          Developed with &nbsp
+          <span>
+             <svg class="pagination__btn-icon" width="14" height="13">
+            <use href="./images/symbol-defs.svg#icon-favorite"></use>
+          </svg>
+          </span>
+          &nbsp by 
+          <span>
+            GoIT Students
+          </span> 
+        </p>
+      
+
+    </div>
+  </footer>
+
+  <div id="js-backdrop" class="backdrop is-hidden">
+    <div class="card">
+      <button class="card__btn-close" type="button">
+        <span class="material-icons card__icon-close">
+          clear
+        </span>
+      </button>
+      
+      <div class="card-box">
+
+      </div>
+      
+    </div>
+  </div>
+</body>
+
 </html>

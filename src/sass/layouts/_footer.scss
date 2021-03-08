@@ -1,0 +1,32 @@
+footer {
+    background-color: $footer-bg-color;
+}
+
+.container--footer{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 29px 40px 29px 40px;
+
+    @include font(14px, 1.14);
+    color: $footer-text-color;
+
+    @include for-size(tablet) {
+        @include font(16px, 1.19);
+    }
+}
+
+.right {
+    margin-bottom: 10px;
+
+    @include for-size(tablet) {
+    margin-bottom: 0;
+    }
+}
+
+.development {
+
+    & > span:last-child {
+        text-decoration: underline;
+    }
+}

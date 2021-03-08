@@ -75,14 +75,10 @@ button {
 }
 
 .button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
 
   border: 1px solid $border-color;
   border-radius: 5px;
-  background-color: transparent;
 
   text-transform: uppercase;
 }

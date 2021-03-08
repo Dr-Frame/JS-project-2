@@ -96,7 +96,7 @@
 
   border-radius: 5px;
 
-  background-color: grey;
+  overflow: hidden;
 
   @include for-size(tablet) {
     width: 264px;
