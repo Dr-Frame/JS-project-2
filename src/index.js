@@ -57,7 +57,11 @@ let moviesArr;
 //заходит обьект для рендера модалки
 let currentFilmObj = {};
 
+// ======================== ПАГИНАЦИЯ ===============================
+
 console.log(refs.paginBtnsRef);
+refs.prevBtnRef.addEventListener('click', handleBtnPrevClick);
+refs.nextBtnRef.addEventListener('click', handleBtnNextClick);
 
 refs.paginBtnWrapper.addEventListener('click', event => {
   if (event.target.nodeName === 'BUTTON') {
@@ -74,15 +78,50 @@ refs.paginBtnWrapper.addEventListener('click', event => {
   }
 });
 
+//==============================    функция стрелки НАЗАД
+function handleBtnPrevClick() {
+  if (apiFetch.page === 1 || resultData.error) {
+    return;
+  } else if (inputRef.value) {
+    galleryRef.innerHTML = '';
+    apiFetch.page -= 1;
+    handleBtnClickSearchQuery();
+    return;
+  } else {
+    galleryRef.innerHTML = '';
+    apiFetch.page -= 1;
+
+    console.log(apiFetch.page);
+    startPopularFilms();
+  }
+}
+
+//===============================   функция стрелки ВПЕРЕД
+function handleBtnNextClick() {
+  console.log(resultData.totalPages);
+  if (apiFetch.page === resultData.totalPages || resultData.error) {
+    return;
+  } else if (inputRef.value) {
+    galleryRef.innerHTML = '';
+    apiFetch.page += 1;
+    handleBtnClickSearchQuery();
+    return;
+  } else {
+    galleryRef.innerHTML = '';
+    apiFetch.page += 1;
+
+    console.log(apiFetch.page);
+    startPopularFilms();
+  }
+}
+// ======================== ******* ПАГИНАЦИЯ ********* =============================== \\\\\\
+
 // ============================== старт приложения ============================
 
 getLocalStorageDataWatched();
 getLocalStorageDataQueue();
 startPopularFilms();
 inputRef.addEventListener('input', _.debounce(handleSearchQuery, 1000));
-
-refs.prevBtnRef.addEventListener('click', handleBtnPrevClick);
-refs.nextBtnRef.addEventListener('click', handleBtnNextClick);
 
 galleryRef.addEventListener('click', modalMatchesFounder);
 
@@ -147,13 +186,13 @@ function filterUniqueWatchedQueue(arrayToFilter, localStorageKey) {
 
 // отрисовка массива ПРОСМОТРЕННЫХ фильмов
 
-// превращает Обьект в строку
+// ======================================== превращает Обьект в строку
 function convertToString(obj) {
   const string = JSON.stringify(obj);
   return string;
 }
 
-// получить данные с локал стораджа WATCHED
+// =======================================  получить данные с локал стораджа WATCHED
 function getLocalStorageDataWatched() {
   const string = localStorage.getItem('watchedMovies');
 
@@ -162,7 +201,7 @@ function getLocalStorageDataWatched() {
   }
 }
 
-// получить данные с локал стораджа QUEUE
+// =====================================  получить данные с локал стораджа QUEUE
 function getLocalStorageDataQueue() {
   const string = localStorage.getItem('moviesInQueue');
 
@@ -171,13 +210,13 @@ function getLocalStorageDataQueue() {
   }
 }
 
-// парсит Строку в Обьект
+// ===================================парсит Строку в Обьект
 function parsedToElement(str) {
   const parsedElement = JSON.parse(str);
   return parsedElement;
 }
 
-// ======================= LOCAL STORAGE =============
+// ======================= LOCAL STORAGE \\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // ============= функции отвечает за стартовую загрузку популярных фильмов =============================
 
@@ -198,7 +237,7 @@ function dishargeCurPage() {
   apiFetch.resetPage();
 }
 
-// функция отрисовки популярных фильмов на странице
+// ============================= функция отрисовки популярных фильмов на странице
 function startPopularFilms() {
   resultData.error = false;
   refs.galleryRef.classList.remove('movie__list--error');
@@ -246,7 +285,7 @@ function genreTransform(moviesDB, genreDB) {
   return transferedGenreArr;
 }
 
-//=================================ставит разметку популярных фильмов
+//================================= ставит разметку популярных фильмов
 function handlePopularFilmMarkup(popularFilms) {
   const popularMarkup = popularFilmsGalerryTpl(popularFilms);
   galleryRef.insertAdjacentHTML('beforeend', popularMarkup);
@@ -254,44 +293,7 @@ function handlePopularFilmMarkup(popularFilms) {
 
 // =================================================================================================
 
-//==============================    функция стрелки НАЗАД
-function handleBtnPrevClick() {
-  if (apiFetch.page === 1 || resultData.error) {
-    return;
-  } else if (inputRef.value) {
-    galleryRef.innerHTML = '';
-    apiFetch.page -= 1;
-    handleBtnClickSearchQuery();
-    return;
-  } else {
-    galleryRef.innerHTML = '';
-    apiFetch.page -= 1;
-
-    console.log(apiFetch.page);
-    startPopularFilms();
-  }
-}
-
-//===============================   функция стрелки ВПЕРЕД
-function handleBtnNextClick() {
-  console.log(resultData.totalPages);
-  if (apiFetch.page === resultData.totalPages || resultData.error) {
-    return;
-  } else if (inputRef.value) {
-    galleryRef.innerHTML = '';
-    apiFetch.page += 1;
-    handleBtnClickSearchQuery();
-    return;
-  } else {
-    galleryRef.innerHTML = '';
-    apiFetch.page += 1;
-
-    console.log(apiFetch.page);
-    startPopularFilms();
-  }
-}
-
-//===============================функции отвечающие за отрисовку запроса
+//===============================  функции отвечающие за отрисовку запроса
 function handleSearchQuery(event) {
   dishargeCurPage();
   resultData.error = false;
