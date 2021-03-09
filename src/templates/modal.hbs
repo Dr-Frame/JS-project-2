@@ -1,48 +1,5 @@
-{{!-- <div class="modal__img-wrap">
-  <img src="{{poster_path}}" alt="" class="modal__img" width="396" height="478" />
-</div>
-<div class="modal__description">
-  <h2 class="modal__title">{{original_title}}</h2>
-  <div class="modal__ratings">
-    <div class="modal__descr-wrapper">
-      <p class="modal__criteria a">Vote/Votes</p>
-      <h3 class="orange">{{vote_average}}</h3>&nbsp/
-      <h3 class="grey">&nbsp{{vote_count}}</h3>
-    </div>
-    <div class="modal__descr-wrapper">
-      <p class="modal__criteria b">Popularity</p>
-      <h3>{{popularity}}</h3>
-    </div>
-    <div class="modal__descr-wrapper">
-      <p class="modal__criteria c">Original Title</p>
-      <h3>{{original_title}}</h3>
-    </div>
-    <div class="modal__descr-wrapper">
-      <p class="modal__criteria d">Genre</p>
-
-      <ul class="modal__genre-list">
-        {{#each genre_ids}}
-        <li>{{this}}&nbsp</li>
-        {{/each}}
-      </ul>
-    </div>
-  </div>
-
-  <h3 class="modal__descr-title">about</h3>
-  <p class="modal__descr-information">{{overview}}</p>
-  <div class="modal__buttons">
-    <button id="js-watched" class="modal__btn  watched">
-      add to watched
-    </button>
-    <button id="js-queue" class="modal__btn queue">add to queue</button>
-  </div>
-</div> --}}
-
-
-
-
 <div class="card__img-wrap">
-  <img src="{{poster_path}}" alt="modal__img" class="card__img">
+  <img src="{{poster_path}}" alt="modal__img" class="card__img js-modal-search">
 </div>
 <div class="card__content-wrap">
   <h3 class="card__title">{{original_title}}</h3>
@@ -73,7 +30,7 @@
   <p class="card__description-title">About</p>
   <p class="card__description">{{overview}}</p>
   <div class="card__btn-box">
-    <button type="button" class="button card__btn">add to Watched</button>
-    <button type="button" class="button card__btn">add to queue</button>
+    <button type="button" class="button card__btn js-btn-watched">add to Watched</button>
+    <button type="button" class="button card__btn js-btn-queue">add to queue</button>
   </div>
 </div>

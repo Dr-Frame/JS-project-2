@@ -3,7 +3,7 @@ const _ = require('lodash');
 import refs from './js/refs';
 import apiFetch from './js/apiService.js';
 import popularFilmsGalerryTpl from './templates/filmgallery.hbs';
-import libraryPage from './templates/library.hbs'
+import libraryPage from './templates/library.hbs';
 import modalTpl from './templates/modal.hbs';
 import './js/close-modal';
 
@@ -13,7 +13,6 @@ import './js/close-modal';
 // мои ссылки для корректной работы впихнутого кода
 const inputRef = refs.inputRef;
 const galleryRef = refs.galleryRef;
-
 const backdropRef = document.querySelector('#js-backdrop');
 
 // берут значение после фетча
@@ -47,6 +46,12 @@ let genreDB = [
   { id: 37, name: 'Western' },
 ];
 
+//массив для хранения просмотренных фильмов (ЛокалСторадж)
+let watchedMovies = [];
+
+//массив для хранения фильмов в очереди (Локал сторадж)
+let moviesInQueue = [];
+
 //заходит сюда отрендеренный масив
 let moviesArr;
 //заходит обьект для рендера модалки
@@ -71,6 +76,7 @@ refs.paginBtnWrapper.addEventListener('click', event => {
 
 // ============================== старт приложения ============================
 
+getLocalStorageDataWatched();
 startPopularFilms();
 inputRef.addEventListener('input', _.debounce(handleSearchQuery, 1000));
 
@@ -79,30 +85,47 @@ refs.nextBtnRef.addEventListener('click', handleBtnNextClick);
 
 galleryRef.addEventListener('click', modalMatchesFounder);
 
-refs.libraryLinkRef.addEventListener('click' ,libraryPageRender )
+refs.libraryLinkRef.addEventListener('click', libraryPageRender);
+
+refs.libraryInsertPlaceRef.addEventListener('click', e => {
+  if (e.target.classList.contains('js-btn-render-watched')) {
+    galleryRef.innerHTML = '';
+    const filArr = watchedMovies.filter(arrFilter);
+    console.log(watchedMovies[2] === watchedMovies[3]);
+
+    console.log('отфильтрованый массив');
+    console.log(filArr);
+    handlePopularFilmMarkup(filArr);
+  }
+});
+
+function arrFilter(item, i, self) {
+  console.log(item);
+  console.log(i);
+  console.log(self);
+  self.indexOf(item) === i;
+}
 
 // ============= функции отвечает за стартовую загрузку популярных фильмов =============================
 
-
-// функция отрисовки страницы библиотеки
+// =========================   функция отрисовки страницы библиотеки
 function libraryPageRender() {
-  refs.libraryInsertPlaceRef.innerHTML = ''
-  galleryRef.innerHTML=''
-  libraryPageMarkupInsert()
+  refs.libraryInsertPlaceRef.innerHTML = '';
+  galleryRef.innerHTML = '';
+  libraryPageMarkupInsert();
 }
 
 //======================    функция рендерит Библиотку страницу
 function libraryPageMarkupInsert() {
-  
   const libraryMarkupTpl = libraryPage();
-  refs.libraryInsertPlaceRef.insertAdjacentHTML('afterbegin' , libraryMarkupTpl)
-
+  refs.libraryInsertPlaceRef.insertAdjacentHTML('afterbegin', libraryMarkupTpl);
 }
 
 function dishargeCurPage() {
   apiFetch.resetPage();
 }
 
+// функция отрисовки популярных фильмов на странице
 function startPopularFilms() {
   resultData.error = false;
   refs.galleryRef.classList.remove('movie__list--error');
@@ -304,5 +327,54 @@ function handleModalMarkup(currentMovie) {
   refs.modalBoxRef.insertAdjacentHTML('afterbegin', modalMarkup);
 }
 
+// ======================= LOCAL STORAGE =============
+
+refs.modalBoxRef.addEventListener('click', e => {
+  if (e.target.classList.contains('js-btn-watched')) {
+    console.log(watchedMovies);
+    if (watchedMovies.includes(currentFilmObj)) {
+      console.log('bad luck');
+      return;
+    } else {
+      watchedMovies.push(currentFilmObj);
+      console.log('succes');
+      console.log(watchedMovies);
+      localStorage.setItem('watchedMovies', convertToString(watchedMovies));
+    }
+
+    /*  watchedMovies.forEach(item => {
+      item.poster_path === currentFilmObj.poster_path {
+        
+      } else {
+        watchedMovies.push(currentFilmObj);
+        console.log('succes');
+        console.log(watchedMovies);
+        localStorage.setItem('watchedMovies', convertToString(watchedMovies));
+      }
+    }); */
+  }
+
+  //return watchedMovies;
+});
+
+// превращает Обьект в строку
+function convertToString(obj) {
+  const string = JSON.stringify(obj);
+  return string;
+}
+
+function getLocalStorageDataWatched() {
+  const string = localStorage.getItem('watchedMovies');
+
+  if (string) {
+    watchedMovies = parsedToElement(string);
+  }
+}
+
+// парсит Строку в Обьект
+function parsedToElement(str) {
+  const parsedElement = JSON.parse(str);
+  return parsedElement;
+}
 // ======================== конец кода  Dr.Frame  =============================================
 //==================================================================================
