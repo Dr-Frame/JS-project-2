@@ -367,13 +367,15 @@ function modalMatchesFounder(event) {
 
   moviesArr.forEach(item => {
     if (item.poster_path === toMatch) {
+      console.log(item);
       currentFilmObj = { ...item };
     } else {
       return;
     }
   });
-  handleModalMarkup(modalGenreEditor(currentFilmObj, genreDB));
+  handleModalMarkup(currentFilmObj);
   backdropRef.classList.remove('is-hidden');
+  console.log(currentFilmObj);
 }
 
 //изменяет жанр при рендере модалки
