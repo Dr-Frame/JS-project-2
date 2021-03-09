@@ -11,7 +11,7 @@ const refs = {
   paginBtnsRef: document.querySelectorAll('.pagination__page-btn'),
   paginBtnWrapper: document.querySelector('.pagination__page-numbers'),
   libraryLinkRef: document.querySelector('.js-library'),
-  libraryInsertPlaceRef: document.querySelector('.my-library')
+  libraryInsertPlaceRef: document.querySelector('.my-library'),
 };
 
 export default refs;
