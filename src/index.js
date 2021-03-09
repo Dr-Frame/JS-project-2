@@ -77,6 +77,7 @@ refs.paginBtnWrapper.addEventListener('click', event => {
 // ============================== старт приложения ============================
 
 getLocalStorageDataWatched();
+getLocalStorageDataQueue();
 startPopularFilms();
 inputRef.addEventListener('input', _.debounce(handleSearchQuery, 1000));
 
@@ -87,24 +88,96 @@ galleryRef.addEventListener('click', modalMatchesFounder);
 
 refs.libraryLinkRef.addEventListener('click', libraryPageRender);
 
-refs.libraryInsertPlaceRef.addEventListener('click', e => {
+// ======================= LOCAL STORAGE =============
+//watched
+refs.libraryInsertPlaceRef.addEventListener('click', markupWatchedInject);
+refs.modalBoxRef.addEventListener('click', containWatchedMoviesArr);
+//queue
+refs.libraryInsertPlaceRef.addEventListener('click', markupQueueInject);
+refs.modalBoxRef.addEventListener('click', containQueueMoviesArr);
+
+//================ функция отрисовки ПРОСМОТРЕННЫХ/
+function markupWatchedInject(e) {
   if (e.target.classList.contains('js-btn-render-watched')) {
     galleryRef.innerHTML = '';
-    const filArr = watchedMovies.filter(arrFilter);
-    console.log(watchedMovies[2] === watchedMovies[3]);
-
-    console.log('отфильтрованый массив');
-    console.log(filArr);
-    handlePopularFilmMarkup(filArr);
+    handlePopularFilmMarkup(watchedMovies);
   }
-});
-
-function arrFilter(item, i, self) {
-  console.log(item);
-  console.log(i);
-  console.log(self);
-  self.indexOf(item) === i;
 }
+
+//================ функция отрисовки В ОЧЕРЕДИ/
+function markupQueueInject(e) {
+  if (e.target.classList.contains('js-btn-render-queue')) {
+    galleryRef.innerHTML = '';
+    handlePopularFilmMarkup(moviesInQueue);
+  }
+}
+
+// =============================  загрузка массива ПРОСМОТРЕННЫХ
+function containWatchedMoviesArr(e) {
+  if (e.target.classList.contains('js-btn-watched')) {
+    filterUniqueWatchedQueue(watchedMovies, 'watchedMovies');
+  }
+}
+
+// =============================  загрузка массива в ОЧЕРЕДИ
+function containQueueMoviesArr(e) {
+  if (e.target.classList.contains('js-btn-queue')) {
+    filterUniqueWatchedQueue(moviesInQueue, 'moviesInQueue');
+  }
+}
+
+// ==========================================отвечает за пуш обьекта в массив ПРОСМОТРЕННЫЕ,
+// ПРОПУСКАЕТ  только уникальые, сохраняет локал сторадж
+function filterUniqueWatchedQueue(arrayToFilter, localStorageKey) {
+  let someTry = false;
+
+  arrayToFilter.forEach((item, i) => {
+    if (item.poster_path === currentFilmObj.poster_path) {
+      someTry = true;
+    }
+  });
+
+  if (someTry) {
+    return;
+  } else {
+    arrayToFilter.push(currentFilmObj);
+    localStorage.setItem(localStorageKey, convertToString(arrayToFilter));
+  }
+}
+
+// отрисовка массива ПРОСМОТРЕННЫХ фильмов
+
+// превращает Обьект в строку
+function convertToString(obj) {
+  const string = JSON.stringify(obj);
+  return string;
+}
+
+// получить данные с локал стораджа WATCHED
+function getLocalStorageDataWatched() {
+  const string = localStorage.getItem('watchedMovies');
+
+  if (string) {
+    watchedMovies = parsedToElement(string);
+  }
+}
+
+// получить данные с локал стораджа QUEUE
+function getLocalStorageDataQueue() {
+  const string = localStorage.getItem('moviesInQueue');
+
+  if (string) {
+    moviesInQueue = parsedToElement(string);
+  }
+}
+
+// парсит Строку в Обьект
+function parsedToElement(str) {
+  const parsedElement = JSON.parse(str);
+  return parsedElement;
+}
+
+// ======================= LOCAL STORAGE =============
 
 // ============= функции отвечает за стартовую загрузку популярных фильмов =============================
 
@@ -223,7 +296,6 @@ function handleSearchQuery(event) {
   dishargeCurPage();
   resultData.error = false;
   refs.galleryRef.classList.remove('movie__list--error');
-  //event.preventDefault();
   apiFetch.searchQuerry = '';
   apiFetch.searchQuerry = inputRef.value;
   console.log(apiFetch.page);
@@ -249,7 +321,6 @@ function handleSearchQuery(event) {
   } else {
     return;
   }
-  //inputRef.value = '';
 }
 
 //функция рендера поискового запроса, при клике НА КНОПКУ
@@ -327,54 +398,5 @@ function handleModalMarkup(currentMovie) {
   refs.modalBoxRef.insertAdjacentHTML('afterbegin', modalMarkup);
 }
 
-// ======================= LOCAL STORAGE =============
-
-refs.modalBoxRef.addEventListener('click', e => {
-  if (e.target.classList.contains('js-btn-watched')) {
-    console.log(watchedMovies);
-    if (watchedMovies.includes(currentFilmObj)) {
-      console.log('bad luck');
-      return;
-    } else {
-      watchedMovies.push(currentFilmObj);
-      console.log('succes');
-      console.log(watchedMovies);
-      localStorage.setItem('watchedMovies', convertToString(watchedMovies));
-    }
-
-    /*  watchedMovies.forEach(item => {
-      item.poster_path === currentFilmObj.poster_path {
-        
-      } else {
-        watchedMovies.push(currentFilmObj);
-        console.log('succes');
-        console.log(watchedMovies);
-        localStorage.setItem('watchedMovies', convertToString(watchedMovies));
-      }
-    }); */
-  }
-
-  //return watchedMovies;
-});
-
-// превращает Обьект в строку
-function convertToString(obj) {
-  const string = JSON.stringify(obj);
-  return string;
-}
-
-function getLocalStorageDataWatched() {
-  const string = localStorage.getItem('watchedMovies');
-
-  if (string) {
-    watchedMovies = parsedToElement(string);
-  }
-}
-
-// парсит Строку в Обьект
-function parsedToElement(str) {
-  const parsedElement = JSON.parse(str);
-  return parsedElement;
-}
 // ======================== конец кода  Dr.Frame  =============================================
 //==================================================================================
