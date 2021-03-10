@@ -6,6 +6,7 @@ import popularFilmsGalerryTpl from './templates/filmgallery.hbs';
 import libraryPage from './templates/library.hbs';
 import modalTpl from './templates/modal.hbs';
 import './js/close-modal';
+import './js/paginTowork';
 
 //============== вставка Dr.Frame======================
 //=====================================================
@@ -14,7 +15,8 @@ import './js/close-modal';
 const inputRef = refs.inputRef;
 const galleryRef = refs.galleryRef;
 const backdropRef = document.querySelector('#js-backdrop');
-const paginationContainer = document.querySelector('.pagination');
+/* const paginationContainer = document.querySelector('.pagination'); */
+const element = document.querySelector('.pagination ul');
 
 // берут значение после фетча
 const resultData = {
@@ -23,6 +25,9 @@ const resultData = {
   totalResults: null,
   error: false,
 };
+
+let totalPages = 100;
+let page = 5;
 
 //массив жанров от АПИ
 let genreDB = [
@@ -60,7 +65,7 @@ let currentFilmObj = {};
 
 // ======================== ПАГИНАЦИЯ ===============================
 
-/* console.log(refs.paginBtnsRef);
+console.log(refs.paginBtnsRef);
 refs.prevBtnRef.addEventListener('click', handleBtnPrevClick);
 refs.nextBtnRef.addEventListener('click', handleBtnNextClick);
 
@@ -77,7 +82,7 @@ refs.paginBtnWrapper.addEventListener('click', event => {
       startPopularFilms();
     }
   }
-}); */
+});
 
 //==============================    функция стрелки НАЗАД
 function handleBtnPrevClick() {
@@ -117,7 +122,9 @@ function handleBtnNextClick() {
 }
 
 //чужой код с пагинацие
-function createPagination(totalPages, page, insertPlace) {
+function createPagination(totalPages, page) {
+  console.log(totalPages);
+  console.log(page);
   let liTag = '';
   let active;
   let beforePage = page - 1;
@@ -185,7 +192,7 @@ function createPagination(totalPages, page, insertPlace) {
       page + 1
     })"><span>Next <i class="fas fa-angle-right"></i></span></li>`;
   }
-  insertPlace.innerHTML = liTag; //add li tag inside ul tag
+  element.innerHTML = liTag; //add li tag inside ul tag
   return liTag; //reurn the li tag
 }
 // ======================== ******* ПАГИНАЦИЯ ********* =============================== \\\\\\
@@ -197,108 +204,13 @@ getLocalStorageDataQueue();
 startPopularFilms();
 
 //==== вызов чужой пагинации
-paginationContainer.innerHTML = createPagination(
-  resultData.totalPages,
-  resultData.currentPage,
-  paginationContainer,
-);
+/* element.innerHTML = createPagination(totalPages, page); */
 //===============
 inputRef.addEventListener('input', _.debounce(handleSearchQuery, 1000));
 
 galleryRef.addEventListener('click', modalMatchesFounder);
 
 refs.libraryLinkRef.addEventListener('click', libraryPageRender);
-
-// ======================= LOCAL STORAGE =============
-//watched
-refs.libraryInsertPlaceRef.addEventListener('click', markupWatchedInject);
-refs.modalBoxRef.addEventListener('click', containWatchedMoviesArr);
-//queue
-refs.libraryInsertPlaceRef.addEventListener('click', markupQueueInject);
-refs.modalBoxRef.addEventListener('click', containQueueMoviesArr);
-
-//================ функция отрисовки ПРОСМОТРЕННЫХ/
-function markupWatchedInject(e) {
-  if (e.target.classList.contains('js-btn-render-watched')) {
-    galleryRef.innerHTML = '';
-    handlePopularFilmMarkup(watchedMovies);
-  }
-}
-
-//================ функция отрисовки В ОЧЕРЕДИ/
-function markupQueueInject(e) {
-  if (e.target.classList.contains('js-btn-render-queue')) {
-    galleryRef.innerHTML = '';
-    handlePopularFilmMarkup(moviesInQueue);
-  }
-}
-
-// =============================  загрузка массива ПРОСМОТРЕННЫХ
-function containWatchedMoviesArr(e) {
-  if (e.target.classList.contains('js-btn-watched')) {
-    filterUniqueWatchedQueue(watchedMovies, 'watchedMovies');
-  }
-}
-
-// =============================  загрузка массива в ОЧЕРЕДИ
-function containQueueMoviesArr(e) {
-  if (e.target.classList.contains('js-btn-queue')) {
-    filterUniqueWatchedQueue(moviesInQueue, 'moviesInQueue');
-  }
-}
-
-// ==========================================отвечает за пуш обьекта в массив ПРОСМОТРЕННЫЕ,
-// ПРОПУСКАЕТ  только уникальые, сохраняет локал сторадж
-function filterUniqueWatchedQueue(arrayToFilter, localStorageKey) {
-  let someTry = false;
-
-  arrayToFilter.forEach((item, i) => {
-    if (item.poster_path === currentFilmObj.poster_path) {
-      someTry = true;
-    }
-  });
-
-  if (someTry) {
-    return;
-  } else {
-    arrayToFilter.push(currentFilmObj);
-    localStorage.setItem(localStorageKey, convertToString(arrayToFilter));
-  }
-}
-
-// отрисовка массива ПРОСМОТРЕННЫХ фильмов
-
-// ======================================== превращает Обьект в строку
-function convertToString(obj) {
-  const string = JSON.stringify(obj);
-  return string;
-}
-
-// =======================================  получить данные с локал стораджа WATCHED
-function getLocalStorageDataWatched() {
-  const string = localStorage.getItem('watchedMovies');
-
-  if (string) {
-    watchedMovies = parsedToElement(string);
-  }
-}
-
-// =====================================  получить данные с локал стораджа QUEUE
-function getLocalStorageDataQueue() {
-  const string = localStorage.getItem('moviesInQueue');
-
-  if (string) {
-    moviesInQueue = parsedToElement(string);
-  }
-}
-
-// ===================================парсит Строку в Обьект
-function parsedToElement(str) {
-  const parsedElement = JSON.parse(str);
-  return parsedElement;
-}
-
-// ======================= LOCAL STORAGE \\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // ============= функции отвечает за стартовую загрузку популярных фильмов =============================
 
@@ -329,6 +241,12 @@ function startPopularFilms() {
       resultData.currentPage = data.page;
       resultData.totalPages = data.total_pages;
       resultData.totalResults = data.total_results;
+      totalPages = resultData.totalPages;
+      page = resultData.currentPage;
+      console.log(resultData.currentPage);
+      console.log(resultData.totalPages);
+      console.log(totalPages);
+      console.log(page);
       return data;
     })
     .then(({ results }) => {
@@ -483,6 +401,97 @@ function handleModalMarkup(currentMovie) {
   const modalMarkup = modalTpl(currentMovie);
   refs.modalBoxRef.insertAdjacentHTML('afterbegin', modalMarkup);
 }
+
+// ======================= LOCAL STORAGE =============
+//watched
+refs.libraryInsertPlaceRef.addEventListener('click', markupWatchedInject);
+refs.modalBoxRef.addEventListener('click', containWatchedMoviesArr);
+//queue
+refs.libraryInsertPlaceRef.addEventListener('click', markupQueueInject);
+refs.modalBoxRef.addEventListener('click', containQueueMoviesArr);
+
+//================ функция отрисовки ПРОСМОТРЕННЫХ/
+function markupWatchedInject(e) {
+  if (e.target.classList.contains('js-btn-render-watched')) {
+    galleryRef.innerHTML = '';
+    handlePopularFilmMarkup(watchedMovies);
+  }
+}
+
+//================ функция отрисовки В ОЧЕРЕДИ/
+function markupQueueInject(e) {
+  if (e.target.classList.contains('js-btn-render-queue')) {
+    galleryRef.innerHTML = '';
+    handlePopularFilmMarkup(moviesInQueue);
+  }
+}
+
+// =============================  загрузка массива ПРОСМОТРЕННЫХ
+function containWatchedMoviesArr(e) {
+  if (e.target.classList.contains('js-btn-watched')) {
+    filterUniqueWatchedQueue(watchedMovies, 'watchedMovies');
+  }
+}
+
+// =============================  загрузка массива в ОЧЕРЕДИ
+function containQueueMoviesArr(e) {
+  if (e.target.classList.contains('js-btn-queue')) {
+    filterUniqueWatchedQueue(moviesInQueue, 'moviesInQueue');
+  }
+}
+
+// ==========================================отвечает за пуш обьекта в массив ПРОСМОТРЕННЫЕ,
+// ПРОПУСКАЕТ  только уникальые, сохраняет локал сторадж
+function filterUniqueWatchedQueue(arrayToFilter, localStorageKey) {
+  let someTry = false;
+
+  arrayToFilter.forEach((item, i) => {
+    if (item.poster_path === currentFilmObj.poster_path) {
+      someTry = true;
+    }
+  });
+
+  if (someTry) {
+    return;
+  } else {
+    arrayToFilter.push(currentFilmObj);
+    localStorage.setItem(localStorageKey, convertToString(arrayToFilter));
+  }
+}
+
+// отрисовка массива ПРОСМОТРЕННЫХ фильмов
+
+// ======================================== превращает Обьект в строку
+function convertToString(obj) {
+  const string = JSON.stringify(obj);
+  return string;
+}
+
+// =======================================  получить данные с локал стораджа WATCHED
+function getLocalStorageDataWatched() {
+  const string = localStorage.getItem('watchedMovies');
+
+  if (string) {
+    watchedMovies = parsedToElement(string);
+  }
+}
+
+// =====================================  получить данные с локал стораджа QUEUE
+function getLocalStorageDataQueue() {
+  const string = localStorage.getItem('moviesInQueue');
+
+  if (string) {
+    moviesInQueue = parsedToElement(string);
+  }
+}
+
+// ===================================парсит Строку в Обьект
+function parsedToElement(str) {
+  const parsedElement = JSON.parse(str);
+  return parsedElement;
+}
+
+// ======================= LOCAL STORAGE \\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // ======================== конец кода  Dr.Frame  =============================================
 //==================================================================================
