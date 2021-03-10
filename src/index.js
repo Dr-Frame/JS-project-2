@@ -321,7 +321,8 @@ function handleSearchQuery(event) {
       })
       .catch(error => console.log(error));
   } else {
-    return;
+    galleryRef.innerHTML = '';
+    startPopularFilms();
   }
 }
 
