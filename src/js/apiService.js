@@ -7,6 +7,7 @@ export default {
   movieID: 0,
   searchQuerry: '',
   page: 2,
+  total_results: null,
 
   fetchSearchRequestGallery() {
     const url = `${this.searchUrl}${this.apiKey}&language=en-US&query=${this.searchQuerry}&page=${this.page}`;
@@ -19,7 +20,7 @@ export default {
         throw new Error(res.status);
       })
       .then(data => {
-        //this.page += 1;
+        this.total_results = data.total_results;
         return data;
       })
       .catch(error => console.log(error));
@@ -31,7 +32,6 @@ export default {
     return fetch(url)
       .then(res => res.json())
       .then(data => {
-        //this.page += 1;
         return data;
       })
       .catch(error => console.log(error));
