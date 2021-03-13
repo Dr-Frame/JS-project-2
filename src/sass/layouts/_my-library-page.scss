@@ -117,3 +117,41 @@
     }
   }
 }
+
+.queue {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.queue-text {
+  margin-bottom: 20px;
+
+  text-transform: uppercase;
+  font-size: 24px;
+  color: $primary-text-color;
+}
+
+.queue-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 60px;
+  border: 1px solid;
+  border-color: $border-color;
+  background-color: $accent-color;
+  border-radius: 4px;
+
+  font-size: 16px;
+  color: $header-text-color;
+  text-transform: uppercase;
+
+  transition: 250ms $transition-function;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
