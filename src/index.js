@@ -70,18 +70,71 @@ getLocalStorageDataWatched();
 getLocalStorageDataQueue();
 startPopularFilms();
 
-// =========================   функция отрисовки страницы библиотеки
-function libraryPageRender() {
-  refs.libraryInsertPlaceRef.innerHTML = '';
-  paginationRef.innerHTML = '';
-  galleryRef.innerHTML = '';
-  libraryPageMarkupInsert();
+// =================== модалка вывод фильма по клику =======================================
+
+function modalMatchesFounder(event) {
+  console.log(event.target);
+  if (
+    event.target.nodeName !== 'IMG' ||
+    event.target.classList.contains('js-img-error')
+  ) {
+    return;
+  }
+  //вызов рендеринга модалки
+  const toMatch = event.target.dataset.compare;
+
+  moviesArr.forEach(item => {
+    if (item.poster_path === toMatch) {
+      console.log(item);
+      currentFilmObj = { ...item };
+    } else {
+      return;
+    }
+  });
+  handleModalMarkup(currentFilmObj);
+  modalBtnChanges(currentFilmObj);
+  backdropRef.classList.remove('is-hidden');
+  console.log(currentFilmObj);
 }
 
-//======================    функция рендерит Библиотку страницу
-function libraryPageMarkupInsert() {
-  const libraryMarkupTpl = libraryPage();
-  refs.libraryInsertPlaceRef.insertAdjacentHTML('afterbegin', libraryMarkupTpl);
+function modalBtnChanges(filmToCompare) {
+  let presentInWatchedArray = false;
+  let presentInQueueArr = false;
+  for (const film of watchedMovies) {
+    if (film.poster_path === filmToCompare.poster_path) {
+      presentInWatchedArray = true;
+    }
+  }
+  for (const film of moviesInQueue) {
+    if (film.poster_path === filmToCompare.poster_path) {
+      presentInQueueArr = true;
+    }
+  }
+  if (presentInWatchedArray) {
+    console.log('in watched');
+    document.querySelector('.js-btn-watched').textContent = 'Already watched';
+    document.querySelector('.js-btn-watched').classList.add('card__btn-active');
+    document.querySelector('.js-btn-watched').disabled = true;
+
+    document
+      .querySelector('.js-btn-queue')
+      .classList.remove('card__btn-active');
+    document.querySelector('.js-btn-queue').textContent = 'add to queue';
+    document.querySelector('.js-btn-queue').disabled = false;
+  }
+
+  if (presentInQueueArr) {
+    console.log('in queue');
+    document.querySelector('.js-btn-queue').textContent = 'Already in queue';
+    document.querySelector('.js-btn-queue').classList.add('card__btn-active');
+    document.querySelector('.js-btn-queue').disabled = true;
+
+    document.querySelector('.js-btn-watched').textContent = 'add to Watched';
+    document
+      .querySelector('.js-btn-watched')
+      .classList.remove('card__btn-active');
+    document.querySelector('.js-btn-watched').disabled = false;
+  }
 }
 
 // ======================= LOCAL STORAGE =============
@@ -130,6 +183,7 @@ function markupQueueInject(e) {
 function containWatchedMoviesArr(e) {
   if (e.target.classList.contains('js-btn-watched')) {
     filterUniqueWatchedQueue(watchedMovies, 'watchedMovies');
+    modalBtnChanges(currentFilmObj);
   }
 }
 
@@ -137,21 +191,23 @@ function containWatchedMoviesArr(e) {
 function containQueueMoviesArr(e) {
   if (e.target.classList.contains('js-btn-queue')) {
     filterUniqueWatchedQueue(moviesInQueue, 'moviesInQueue');
+    /*    clearWatchedArr(watchedMovies); */
+    modalBtnChanges(currentFilmObj);
   }
 }
 
 // ==========================================отвечает за пуш обьекта в массив ПРОСМОТРЕННЫЕ,
 // ПРОПУСКАЕТ  только уникальые, сохраняет локал сторадж
 function filterUniqueWatchedQueue(arrayToFilter, localStorageKey) {
-  let someTry = false;
+  let isNotUnique = false;
 
   arrayToFilter.forEach((item, i) => {
     if (item.poster_path === currentFilmObj.poster_path) {
-      someTry = true;
+      isNotUnique = true;
     }
   });
 
-  if (someTry) {
+  if (isNotUnique) {
     return;
   } else {
     arrayToFilter.push(currentFilmObj);
@@ -159,7 +215,14 @@ function filterUniqueWatchedQueue(arrayToFilter, localStorageKey) {
   }
 }
 
-// отрисовка массива ПРОСМОТРЕННЫХ фильмов
+// очистка масива ПРОСМОТР/ ОЧЕРЕДЬ по кнопке
+/* function clearWatchedArr(watchArr) {
+  watchArr.forEach((film, i) => {
+    if (currentFilmObj.poster_path === film.poster_path) {
+      watchArr.splice(i, 1);
+    }
+  });
+} */
 
 // ======================================== превращает Обьект в строку
 function convertToString(obj) {
@@ -192,6 +255,20 @@ function parsedToElement(str) {
 }
 
 // ======================= LOCAL STORAGE \\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// =========================   функция отрисовки страницы библиотеки
+function libraryPageRender() {
+  refs.libraryInsertPlaceRef.innerHTML = '';
+  paginationRef.innerHTML = '';
+  galleryRef.innerHTML = '';
+  libraryPageMarkupInsert();
+}
+
+//======================    функция рендерит Библиотку страницу
+function libraryPageMarkupInsert() {
+  const libraryMarkupTpl = libraryPage();
+  refs.libraryInsertPlaceRef.insertAdjacentHTML('afterbegin', libraryMarkupTpl);
+}
 
 // ======================== ПАГИНАЦИЯ ===============================
 
@@ -329,33 +406,7 @@ function failureMarkup(placeToInsert) {
   placeToInsert.insertAdjacentHTML('afterbegin', failureMarkup);
 }
 
-// =================== модалка вывод фильма по клику =======================================
-
-function modalMatchesFounder(event) {
-  console.log(event.target);
-  if (
-    event.target.nodeName !== 'IMG' ||
-    event.target.classList.contains('js-img-error')
-  ) {
-    return;
-  }
-  //вызов рендеринга модалки
-  const toMatch = event.target.dataset.compare;
-
-  moviesArr.forEach(item => {
-    if (item.poster_path === toMatch) {
-      console.log(item);
-      currentFilmObj = { ...item };
-    } else {
-      return;
-    }
-  });
-  handleModalMarkup(currentFilmObj);
-  backdropRef.classList.remove('is-hidden');
-  console.log(currentFilmObj);
-}
-
-//изменяет жанр при рендере модалки
+//изменяет жанр при рендере модалки == в коде пока не используется
 function modalGenreEditor(movie, genreDB) {
   //изменяем жанр
   let genreArr = [];

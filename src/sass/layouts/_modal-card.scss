@@ -14,7 +14,8 @@
   /* overflow-y: scroll; */
   opacity: 1;
   visibility: visible;
-  transition: opacity 250ms $transition-function, visibility 250ms $transition-function;
+  transition: opacity 250ms $transition-function,
+    visibility 250ms $transition-function;
 
   &.is-hidden {
     opacity: 0;
@@ -27,10 +28,9 @@
 
   padding: 48px 20px 41px;
 
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12),
-    0px 1px 1px rgba(0, 0, 0, 0.14),
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 
   @include for-size(mobile) {
     top: 50%;
@@ -170,7 +170,7 @@
     text-transform: uppercase;
   }
 
-  &>span {
+  & > span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,10 +180,10 @@
     @include font(12px, 1.17);
 
     border-radius: 5px;
-    background-color: #F7F7F7;
+    background-color: #f7f7f7;
   }
 
-  &>span:first-child {
+  & > span:first-child {
     color: $header-text-color;
     background-color: $accent-color;
   }
@@ -195,8 +195,7 @@
 }
 
 .card__info-content__genre-item {
-
-  &:last-child>span {
+  &:last-child > span {
     display: none;
   }
 }
@@ -241,4 +240,10 @@
   @include for-size(desktop) {
     width: 136px;
   }
+}
+
+.card__btn-active {
+  color: $accent-btn-text-color;
+  background-color: $accent-color;
+  border-color: $border-accent-color;
 }
